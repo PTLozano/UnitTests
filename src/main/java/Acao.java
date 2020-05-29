@@ -1,5 +1,4 @@
 import java.util.Random;
-import java.util.Vector;
 
 public class Acao {
     private String acao;
@@ -14,34 +13,60 @@ public class Acao {
 
     private int quantidadeAtual;
 
-    private Vector<Acao> listaAcoes;
+    private boolean acaoDisponivel;
+
+    private String[] acoes = {
+            "VALE3",
+            "PETR4",
+            "MGLU3",
+            "VVAR3"
+    };
+//
+//    public Acao(String acao) {
+//        this.acao = acao;
+//        setValorAtual();
+//        setQuantidadeAtual();
+//    }
 
     public Acao(String acao) {
-        Random gerador = new Random();
-        this.acao = acao;
-        this.valorAtual = gerador.nextInt(150);
-        this.quantidadeAtual = gerador.nextInt(150) + 100;
+        acaoDisponivel = verificaDisponibilidade(acao);
+        if (acaoDisponivel) {
+            this.acao = acao;
+            setValorAtual();
+            setQuantidadeAtual();
+        }
     }
 
-    public void geraListaAcoes(){
-        String[] acoes = new String[4];
-        acoes[0] = "VALE3";
-        acoes[1] = "PETR4";
-        acoes[2] = "MGLU3";
-        acoes[3] = "VVAR3";
-
-        listaAcoes = new Vector<Acao>();
-        for (int i = 0; i < acoes.length; i++) {
-            listaAcoes.add(new Acao(acoes[i]));
+    private boolean verificaDisponibilidade(String acao) {
+        for (String acoe : acoes) {
+            if (acoe.equals(acao)) {
+                return true;
+            }
         }
+
+        return false;
+    }
+
+    public boolean acaoEstaDisponivel() {
+        return acaoDisponivel;
     }
 
     public int getQuantidadeAtual() {
         return quantidadeAtual;
     }
 
+    private void setQuantidadeAtual() {
+        Random gerador = new Random();
+        this.quantidadeAtual = gerador.nextInt(150) + 100;
+    }
+
     public float getValorAtual() {
         return valorAtual;
+    }
+
+    private void setValorAtual() {
+        Random gerador = new Random();
+        this.valorAtual = gerador.nextInt(150);
     }
 
     public int getQuantidadeCompra() {
@@ -60,21 +85,20 @@ public class Acao {
         this.valorCompra = valorCompra;
     }
 
-    public boolean ordemExecutada() {
+    public boolean ordemFoiExecutada() {
         return ordemExecutada;
     }
 
     public boolean executarOrdem() {
-        if(getQuantidadeAtual() >= getQuantidadeCompra() &&
-            Float.compare(((float) (getValorAtual() * 1.15)), getValorCompra()) >= 0 &&
-            Float.compare(((float) (getValorAtual() * 0.85)), getValorCompra()) <= 0) {
+        if (getQuantidadeAtual() >= getQuantidadeCompra() &&
+                Float.compare(((float) (getValorAtual() * 1.15)), getValorCompra()) >= 0 &&
+                Float.compare(((float) (getValorAtual() * 0.85)), getValorCompra()) <= 0) {
             this.quantidadeAtual -= getQuantidadeCompra();
             this.ordemExecutada = true;
-        }
-        else{
+        } else {
             this.ordemExecutada = false;
         }
 
-        return ordemExecutada();
+        return ordemFoiExecutada();
     }
 }
