@@ -4,10 +4,31 @@ import org.powermock.api.mockito.PowerMockito;
 
 public class AcaoTest {
     @Test
+    public void efetuaCompraNoValor() {
+        // Arrange
+        Acao acao = new Acao("PETR4");
+        Acao.Status esperado = Acao.Status.Efetuado;
+
+        // Act
+        float valorAtual = acao.getValorAtual();
+        acao.setValorCompra(valorAtual);
+
+        int quantidadeAtual = acao.getQuantidadeAtual();
+        acao.setQuantidadeCompra(quantidadeAtual);
+
+        acao.executarOrdem();
+
+        Acao.Status atual = acao.statusOrdem();
+
+        // Assert
+        Assert.assertEquals(esperado, atual);
+    }
+
+    @Test
     public void efetuaCompra15PorcentoMenor() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = true;
+        Acao.Status esperado = Acao.Status.Efetuado;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -16,7 +37,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -26,7 +47,7 @@ public class AcaoTest {
     public void efetuaCompra15PorcentoMaior() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = true;
+        Acao.Status esperado = Acao.Status.Efetuado;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -35,7 +56,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -45,7 +66,7 @@ public class AcaoTest {
     public void efetuaCompra16PorcentoMenor() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = false;
+        Acao.Status esperado = Acao.Status.ProblemaNoValor;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -54,7 +75,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -64,7 +85,7 @@ public class AcaoTest {
     public void efetuaCompra16PorcentoMaior() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = false;
+        Acao.Status esperado = Acao.Status.ProblemaNoValor;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -73,7 +94,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -83,7 +104,7 @@ public class AcaoTest {
     public void efetuaCompraQuantidadeMenor() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = true;
+        Acao.Status esperado = Acao.Status.Efetuado;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -92,7 +113,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual - 100);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -102,7 +123,7 @@ public class AcaoTest {
     public void efetuaCompraQuantidadeMaior() {
         // Arrange
         Acao acao = new Acao("VALE3");
-        boolean esperado = false;
+        Acao.Status esperado = Acao.Status.ProblemaNaQuantidade;
 
         // Act
         float valorAtual = acao.getValorAtual();
@@ -111,7 +132,7 @@ public class AcaoTest {
         int quantidadeAtual = acao.getQuantidadeAtual();
         acao.setQuantidadeCompra(quantidadeAtual + 100);
 
-        boolean atual = acao.executarOrdem();
+        Acao.Status atual = acao.executarOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);
@@ -149,7 +170,7 @@ public class AcaoTest {
         final String METHOD = "getValorAtual";
         Acao acao = new Acao("PETR4");
         float valorCarteiraCliente = 12750;
-        boolean esperado = true;
+        Acao.Status esperado = Acao.Status.Efetuado;
 
         // Fica verificando o objeto e altera o objeto
         Acao spy = PowerMockito.spy(acao);
@@ -159,7 +180,7 @@ public class AcaoTest {
         spy.setValorCompra(valorCarteiraCliente);
         spy.executarOrdem();
 
-        boolean atual = spy.ordemFoiExecutada();
+        Acao.Status atual = spy.statusOrdem();
 
         // Assert
         Assert.assertEquals(esperado, atual);

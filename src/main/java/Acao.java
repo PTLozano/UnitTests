@@ -1,13 +1,19 @@
 import java.util.Random;
 
 public class Acao {
+    public enum Status {
+        Efetuado,
+        ProblemaNaQuantidade,
+        ProblemaNoValor
+    }
+
     private String acao;
+
+    private Status statusAcao;
 
     private int quantidade;
 
     private float valorCompra;
-
-    private boolean ordemExecutada;
 
     private float valorAtual;
 
@@ -79,20 +85,23 @@ public class Acao {
         this.valorCompra = valorCompra;
     }
 
-    public boolean ordemFoiExecutada() {
-        return ordemExecutada;
-    }
-
-    public boolean executarOrdem() {
-        if (getQuantidadeAtual() >= getQuantidadeCompra() &&
-                Float.compare(((float) (getValorAtual() * 1.15)), getValorCompra()) >= 0 &&
-                Float.compare(((float) (getValorAtual() * 0.85)), getValorCompra()) <= 0) {
-            this.quantidadeAtual -= getQuantidadeCompra();
-            this.ordemExecutada = true;
+    public Status executarOrdem() {
+        if (getQuantidadeAtual() >= getQuantidadeCompra()) {
+            if (Float.compare(((float) (getValorAtual() * 1.15)), getValorCompra()) >= 0 &&
+                    Float.compare(((float) (getValorAtual() * 0.85)), getValorCompra()) <= 0) {
+                this.quantidadeAtual -= getQuantidadeCompra();
+                this.statusAcao = Status.Efetuado;
+            } else {
+                this.statusAcao = Status.ProblemaNoValor;
+            }
         } else {
-            this.ordemExecutada = false;
+            this.statusAcao = Status.ProblemaNaQuantidade;
         }
 
-        return ordemFoiExecutada();
+        return statusOrdem();
+    }
+
+    public Status statusOrdem() {
+        return this.statusAcao;
     }
 }
