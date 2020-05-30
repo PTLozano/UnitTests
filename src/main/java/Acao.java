@@ -21,12 +21,6 @@ public class Acao {
             "MGLU3",
             "VVAR3"
     };
-//
-//    public Acao(String acao) {
-//        this.acao = acao;
-//        setValorAtual();
-//        setQuantidadeAtual();
-//    }
 
     public Acao(String acao) {
         acaoDisponivel = verificaDisponibilidade(acao);
@@ -38,8 +32,8 @@ public class Acao {
     }
 
     private boolean verificaDisponibilidade(String acao) {
-        for (String acoe : acoes) {
-            if (acoe.equals(acao)) {
+        for (String temp : acoes) {
+            if (temp.equals(acao)) {
                 return true;
             }
         }
